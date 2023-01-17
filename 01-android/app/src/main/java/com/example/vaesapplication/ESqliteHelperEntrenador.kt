@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper
 
 class ESqliteHelperEntrenador(
     contexto: Context?, // THIS
-): SQLiteOpenHelper(
+) : SQLiteOpenHelper(
     contexto,
     "moviles", // nombre BDD
     null,
@@ -25,7 +25,7 @@ class ESqliteHelperEntrenador(
         db?.execSQL(scriptSQLCrearTablaEntrenador)
     }
 
-    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { }
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {}
 
     fun crearEntrenador(
         nombre: String,
@@ -42,11 +42,11 @@ class ESqliteHelperEntrenador(
                 valoresAGuardar // valores
             )
         basedatosEscritura.close()
-        return if(resultadoGuardar.toInt() == -1) false else true
+        return if (resultadoGuardar.toInt() == -1) false else true
     }
 
 
-    fun eliminarEntrenadorFormulario(id: Int): Boolean{
+    fun eliminarEntrenadorFormulario(id: Int): Boolean {
         //        val conexionEscritura = this.writableDatabase
         val conexionEscritura = writableDatabase
         // "SELECT * FROM ENTRENADOR WHERE ID = ?"
@@ -85,6 +85,24 @@ class ESqliteHelperEntrenador(
             )
         conexionEscritura.close()
         return if (resultadoActualizacion == -1) false else true
+    }
+
+    fun consultarEntrenadorPorId(id: Int): BEntrenador {
+        // val baseDatosLectura = this.readableDatabase
+        val baseDatosLectura = readableDatabase
+        val scriptConsultarUsuario = "SELECT * FROM ENTRENADOR WHERE ID = ?"
+        val resultadoConsultaLectura = baseDatosLectura.rawQuery(
+            scriptConsultarUsuario, // Consulta
+            arrayOf(
+                id.toString()
+            ) // Parametros consulta
+        )
+        // Logica busqueda
+        val existeUsuario = resultadoConsultaLectura.moveToFirst()
+        val usuarioEncontrado = BEntrenador(0, "", "")
+        resultadoConsultaLectura.close()
+        baseDatosLectura.close()
+        return usuarioEncontrado
     }
 
 
