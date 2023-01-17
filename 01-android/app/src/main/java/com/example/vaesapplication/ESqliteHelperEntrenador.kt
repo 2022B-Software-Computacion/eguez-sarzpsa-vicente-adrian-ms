@@ -46,4 +46,24 @@ class ESqliteHelperEntrenador(
     }
 
 
+    fun eliminarEntrenadorFormulario(id: Int): Boolean{
+        //        val conexionEscritura = this.writableDatabase
+        val conexionEscritura = writableDatabase
+        // "SELECT * FROM ENTRENADOR WHERE ID = ?"
+        // arrayOf(
+        //    id.toString()
+        // )
+        val resultadoEliminacion = conexionEscritura
+            .delete(
+                "ENTRENADOR", // Nombre tabla
+                "id=?", // Consulta Where
+                arrayOf(
+                    id.toString()
+                ) // Parametros
+            )
+        conexionEscritura.close()
+        return if (resultadoEliminacion.toInt() == -1) false else true
+    }
+
+
 }
