@@ -65,5 +65,27 @@ class ESqliteHelperEntrenador(
         return if (resultadoEliminacion.toInt() == -1) false else true
     }
 
+    fun actualizarEntrenadorFormulario(
+        nombre: String,
+        descripcion: String,
+        idActualizar: Int
+    ): Boolean {
+        val conexionEscritura = writableDatabase
+        val valoresAActualizar = ContentValues()
+        valoresAActualizar.put("nombre", nombre)
+        valoresAActualizar.put("descripcion", descripcion)
+        val resultadoActualizacion = conexionEscritura
+            .update(
+                "ENTRENADOR", // Nombre tabla
+                valoresAActualizar,  // Valores a actualizar
+                "id=?", // Clausula Where
+                arrayOf(
+                    idActualizar.toString()
+                ) // Parametros clausula Where
+            )
+        conexionEscritura.close()
+        return if (resultadoActualizacion == -1) false else true
+    }
+
 
 }
