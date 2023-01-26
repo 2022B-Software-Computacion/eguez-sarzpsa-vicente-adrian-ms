@@ -19,9 +19,17 @@
         <activity
             android:name=".ECrudEntrenador"
             android:exported="false" />
+        <!--    android:exported="true" Para que seas visible!    -->
         <activity
             android:name=".CIntentExplicitoParametros"
-            android:exported="false" />
+            android:exported="true"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".BListView"
             android:exported="false" />
