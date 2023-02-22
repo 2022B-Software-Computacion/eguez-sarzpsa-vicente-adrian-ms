@@ -30,7 +30,64 @@ class JFirebaseFirestore : AppCompatActivity() {
 
         val botonOrderBy = findViewById<Button>(R.id.btn_fs_order_by)
         botonOrderBy.setOnClickListener { consultarConOrderBy(adaptador) }
+
+        val botonObtenerDocumento = findViewById<Button>(
+            R.id.btn_fs_odoc
+        )
+        botonObtenerDocumento.setOnClickListener {
+            consultarDocumento(adaptador)
+        }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    fun consultarDocumento(
+        adaptador: ArrayAdapter<JCitiesDto>
+    ){
+        val db = Firebase.firestore
+        val citiesRefUnico = db
+            .collection("cities")
+        // /cities/BJ (1 documento)
+        // /cities/BG/hijo/1/nieto/1.1
+        citiesRefUnico
+            .document("BJ")
+//            .collection("hijo")
+//            .document("1")
+//            .collection("nieto")
+//            .document("1.1")
+            .get()
+            .addOnSuccessListener {
+                it.id // obtener el id de firestore
+                limpiarArreglo()
+                arreglo.add(
+                    JCitiesDto(
+                        it.data?.get("name") as String?,
+                        it.data?.get("state") as String?,
+                        it.data?.get("country") as String?,
+                        it.data?.get("capital") as Boolean?,
+                        it.data?.get("population") as Long?,
+                        it.data?.get("regions") as ArrayList<String>
+                    )
+                )
+                adaptador.notifyDataSetChanged()
+            }
+    }
+
+
+
+
+
     fun consultarConOrderBy(
         adaptador: ArrayAdapter<JCitiesDto>
     ){
@@ -46,6 +103,7 @@ class JFirebaseFirestore : AppCompatActivity() {
             .get() // obtenemos la peticion
             .addOnSuccessListener {
                 for (ciudad in it) {
+                    ciudad.id
                     anadirAArregloCiudad(arreglo, ciudad, adaptador)
                 }
             }
@@ -134,6 +192,7 @@ class JFirebaseFirestore : AppCompatActivity() {
         ciudad: QueryDocumentSnapshot,
         adaptador: ArrayAdapter<JCitiesDto>
     ) {
+        ciudad.id
         val nuevaCiudad = JCitiesDto(
             ciudad.data.get("name") as String?,
             ciudad.data.get("state") as String?,
