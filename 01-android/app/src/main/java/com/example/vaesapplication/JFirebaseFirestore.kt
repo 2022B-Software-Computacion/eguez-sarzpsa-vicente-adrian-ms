@@ -9,6 +9,8 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.util.*
+import kotlin.collections.ArrayList
 
 class JFirebaseFirestore : AppCompatActivity() {
     var query: Query? = null
@@ -39,9 +41,63 @@ class JFirebaseFirestore : AppCompatActivity() {
         }
         val botonFirebaseIndiceCompuesto = findViewById<Button>(R.id.btn_fs_ind_comp)
         botonFirebaseIndiceCompuesto.setOnClickListener { consultaIndiceCompuesto(adaptador) }
+
+        val botonFirebaseCrear = findViewById<Button>(R.id.btn_fs_crear)
+        botonFirebaseCrear.setOnClickListener { crearDatosEjemplo() }
     }
 
-    
+    fun crearDatosEjemplo(){
+        val db = Firebase.firestore
+        val referenciaEjemploEstudiante = db
+            .collection("ejemplo") // ejemplo/123456789/estudiante/....
+            .document("123456789")
+            .collection("estudiante")
+        val identificador = Date().time
+        val datosEstudiante = hashMapOf(
+            "nombre" to "Adrian",
+            "graduado" to false,
+            "promedio" to 14.00,
+            "direccion" to hashMapOf(
+                "direccion" to "Mitad del mundo",
+                "numeroCalle" to 1234
+            ),
+            "materias" to listOf("web", "moviles")
+        )
+
+        // Con identificador quemado
+        referenciaEjemploEstudiante
+            .document("123456789")
+            .set(datosEstudiante) // actualiza o crea
+            .addOnCompleteListener { /* Si todo salio bien*/ }
+            .addOnFailureListener { /* Si algo salio mal*/ }
+
+        // Con identificador generado en Date.time
+        referenciaEjemploEstudiante
+            .document(identificador.toString())
+            .set(datosEstudiante) // actualiza o crea
+            .addOnCompleteListener { /* Si todo salio bien*/ }
+            .addOnFailureListener { /* Si algo salio mal*/ }
+
+        // Sin identificador
+        referenciaEjemploEstudiante
+            .add(datosEstudiante) // crea
+            .addOnCompleteListener { /* Si todo salio bien*/ }
+            .addOnFailureListener { /* Si algo salio mal*/ }
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+
 
 
 
