@@ -40,6 +40,17 @@ class JFirebaseFirestore : AppCompatActivity() {
         val botonFirebaseIndiceCompuesto = findViewById<Button>(R.id.btn_fs_ind_comp)
         botonFirebaseIndiceCompuesto.setOnClickListener { consultaIndiceCompuesto(adaptador) }
     }
+
+    
+
+
+
+
+
+
+
+
+
     fun consultaIndiceCompuesto(
         adaptador: ArrayAdapter<JCitiesDto>
     ){
@@ -57,17 +68,6 @@ class JFirebaseFirestore : AppCompatActivity() {
                 }
             }
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
     fun consultarDocumento(
