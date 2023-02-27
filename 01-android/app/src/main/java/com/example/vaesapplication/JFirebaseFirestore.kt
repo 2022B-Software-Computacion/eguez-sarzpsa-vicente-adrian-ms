@@ -67,7 +67,7 @@ class JFirebaseFirestore : AppCompatActivity() {
         } else {
             tarea = query!!.get() // consulta de la consulta anterior empezando en el nuevo documento
         }
-        
+
     }
 
 
