@@ -52,6 +52,10 @@ class JFirebaseFirestore : AppCompatActivity() {
 
         val botonFirebaseEmpezarPaginar = findViewById<Button>(R.id.btn_fs_epaginar)
         botonFirebaseEmpezarPaginar.setOnClickListener { query = null; consultarCiudades(adaptador); }
+        val botonFirebasePaginar = findViewById<Button>(R.id.btn_fs_paginar)
+        botonFirebasePaginar.setOnClickListener {
+            consultarCiudades(adaptador)
+        }
     }
     fun consultarCiudades(
         adaptador: ArrayAdapter<JCitiesDto>
@@ -68,6 +72,26 @@ class JFirebaseFirestore : AppCompatActivity() {
             tarea = query!!.get() // consulta de la consulta anterior empezando en el nuevo documento
         }
 
+        if (tarea != null) {
+            tarea
+                .addOnSuccessListener { documentSnapshots ->
+                    guardarQuery(documentSnapshots, citiesRef)
+                    for (ciudad in documentSnapshots) {
+                        anadirAArregloCiudad(arreglo, ciudad, adaptador)
+                    }
+                    adaptador.notifyDataSetChanged()
+                }
+                .addOnFailureListener {
+                    // si hay fallos
+                }
+        }
+    }
+    fun guardarQuery(documentSnapshots: QuerySnapshot, refCities: Query){
+        if (documentSnapshots.size() > 0) {
+            val ultimoDocumento = documentSnapshots.documents[documentSnapshots.size() - 1]
+            query = refCities
+                .startAfter(ultimoDocumento)
+        }
     }
 
 
